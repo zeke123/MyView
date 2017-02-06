@@ -1,10 +1,11 @@
 package com.zhoujian.myview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.Picture;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,10 +17,18 @@ import android.view.WindowManager;
 public class CustomView extends View
 {
 
+    // 1.创建Picture
+    private Picture mPicture = new Picture();
+
+
     //创建画笔
     private Paint mPaint = new Paint();
 
+    private Bitmap bitmap;
+
     private int width;
+
+    private Paint textPaint;
 
     private int height;
 
@@ -39,11 +48,38 @@ public class CustomView extends View
         super(context, attrs);
 
         //初始化画笔
-        initPaint();
+        //initPaint();
+
+        // 创建画笔
+         textPaint = new Paint();
+        // 设置颜色
+        textPaint.setColor(Color.BLACK);
+        // 设置样式
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(50);
         //获取屏幕宽和高
-        getScreenWH();
+        //getScreenWH();
 
+        // bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher);
 
+        // 调用录制
+        //recording();
+    }
+
+    private void recording()
+    {
+        // 开始录制
+        Canvas canvas = mPicture.beginRecording(500, 500);
+        // 创建一个画笔
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setStyle(Paint.Style.FILL);
+        // 在Canvas中具体操作
+        canvas.translate(250,250);
+        // 绘制一个圆
+        canvas.drawCircle(0,0,100,paint);
+        //结束录制
+        mPicture.endRecording();
     }
 
     private void getScreenWH()
@@ -125,7 +161,69 @@ public class CustomView extends View
     @Override
     protected void onDraw(Canvas canvas)
     {
+
+
         canvas.drawColor(Color.RED); //绘制红色
+
+
+        // 文本(要绘制的内容)
+        String str = "TEXTTEXT";
+
+        // 参数分别为 (文本 基线x 基线y 画笔)
+        //canvas.drawText(str,230,600,textPaint);
+
+
+        // 参数分别为 (字符串 开始截取位置 结束截取位置 基线x 基线y 画笔)
+        //canvas.drawText(str,1,3,300,600,textPaint);
+
+
+
+
+
+        canvas.drawPosText(str,new float[]{
+                100,100,    // 第一个字符位置
+                150,200,    // 第二个字符位置
+                200,300,    // ...
+                250,400,
+                300,500,
+                350,600,
+                400,700,
+                450,800
+        },textPaint);
+
+
+        //mPicture.draw(canvas);
+
+        //canvas.drawPicture(mPicture,new RectF(0,0,mPicture.getWidth(),200));
+
+
+        // 包装成为Drawable
+        //PictureDrawable drawable = new PictureDrawable(mPicture);
+        // 设置绘制区域 -- 注意此处所绘制的实际内容不会缩放
+        //drawable.setBounds(0,0,250,mPicture.getHeight());
+        // 绘制
+        //drawable.draw(canvas);
+
+
+
+
+        //canvas.drawBitmap(bitmap,new Matrix(),new Paint());
+
+
+
+       // canvas.drawBitmap(bitmap,300,300,new Paint());
+
+
+
+        // 将画布坐标系移动到画布中央
+        //canvas.translate(width/2,height/2);
+        // 指定图片绘制区域(左上角的四分之一)
+        // Rect src = new Rect(0,0,bitmap.getWidth()/2,bitmap.getHeight()/2);
+        // 指定图片在屏幕上显示的区域
+        //Rect dst = new Rect(0,0,200,200);
+        // 绘制图片
+        //canvas.drawBitmap(bitmap,src,dst,null);
+
 
         //在坐标（350,400处画一个点
         //canvas.drawPoint(350,400,mPaint);
@@ -313,7 +411,7 @@ public class CustomView extends View
 
 
 
-        // 将坐标系原点移动到画布正中心
+      /*  // 将坐标系原点移动到画布正中心
         canvas.translate(width / 2, height / 2);
         // 矩形区域
         RectF rect = new RectF(0,0,150,150);
@@ -325,6 +423,9 @@ public class CustomView extends View
         // 绘制白色矩形
         mPaint.setColor(Color.WHITE);
         canvas.drawRect(rect,mPaint);
+*/
+
+
 
     }
 }
